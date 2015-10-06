@@ -1,0 +1,60 @@
+- name: modify repository
+  apt_repository:
+    repo: 'deb http://apt.mackerel.io/debian/ mackerel contrib'
+    state: present
+
+- name: install
+  apt:
+    name: "{{ item }}"
+    state: latest
+    force: yes
+  with_items:
+   - mackerel-agent
+   - mackerel-agent-plugins
+   - nagios-plugins
+  notify: restart mackerel-agent
+
+- name: modify sysconfig
+  template:
+    src: sysconfig
+    dest: /etc/default/mackerel-agent
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mackerel-agent
+
+- name: modify mackerel-agent.conf
+  template:
+    src: mackerel-agent.conf
+    dest: /etc/mackerel-agent/mackerel-agent.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mackerel-agent
+
+- name: modify plugins config directory
+  file:
+    path: "/etc/mackerel-agent/conf.d/"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: modify plugins config
+  template:
+    src: "plugins/{{ item }}"
+    dest: "/etc/mackerel-agent/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ plugin_conf }}"
+  notify: restart mackerel-agent
+
+- name: mackerel-agent is enabled
+  service:
+    name: mackerel-agent
+    state: started
+    enabled: yes
+
+- include: notify_slack.yml
+  when: auto_retirement == '1'

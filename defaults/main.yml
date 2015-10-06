@@ -1,0 +1,4 @@
+mackerel_service: default
+mackerel_role: default
+plugin_conf: []
+auto_retirement: '1'

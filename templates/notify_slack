@@ -1,0 +1,32 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides: notify_slack
+# Required-Start: $local_fs $network mackerel-agent
+# Required-Stop: $network mackerel-agent
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# description: Notify to Slack
+### END INIT INFO
+
+# Mackerel
+HOST_ID=$(cat /var/lib/mackerel-agent/id)
+SERVICE="{{ mackerel_service }}"
+ROLE="{{ mackerel_role }}"
+
+# Slack
+SLACK_URL="{{ slack_url }}"
+SLACK_CHANNEL="{{ slack_channel }}"
+
+LOCKFILE='/var/lock/subsys/notify_slack'
+
+case "$1" in
+    start)
+        curl -X POST --data-urlencode "payload={\"channel\": \"${SLACK_CHANNEL}\", \"username\": \"cloud-init\", \"text\": \"<https://mackerel.io/orgs/IntimateMerger/hosts/${HOST_ID}|${HOSTNAME}> (<https://mackerel.io/orgs/IntimateMerger/services/${SERVICE}#role=${ROLE}|${SERVICE} ${ROLE}>):  Launched Now\", \"icon_emoji\": \":cloud:\"}" ${SLACK_URL}
+        touch ${LOCKFILE}
+        ;;
+    stop)
+        curl -X POST --data-urlencode "payload={\"channel\": \"${SLACK_CHANNEL}\", \"username\": \"cloud-init\", \"text\": \"<https://mackerel.io/orgs/IntimateMerger/hosts/${HOST_ID}|${HOSTNAME}> (<https://mackerel.io/orgs/IntimateMerger/services/${SERVICE}#role=${ROLE}|${SERVICE} ${ROLE}>):  Terminating...\", \"icon_emoji\": \":cloud:\"}" ${SLACK_URL}
+        rm -f ${LOCKFILE}
+        ;;
+esac

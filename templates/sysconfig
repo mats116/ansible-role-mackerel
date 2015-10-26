@@ -1,2 +1,2 @@
 OTHER_OPTS=-role={{ mackerel_service }}:{{ mackerel_role }}
-AUTO_RETIREMENT={{ auto_retirement }}
+AUTO_RETIREMENT={{ mackerel_auto_retirement }}

@@ -47,7 +47,7 @@
     owner: root
     group: root
     mode: 0644
-  with_items: "{{ plugin_conf }}"
+  with_items: mackerel_plugin_conf
   notify: restart mackerel-agent
 
 - name: mackerel-agent is enabled
@@ -57,4 +57,4 @@
     enabled: yes
 
 - include: notify_slack.yml
-  when: auto_retirement == '1'
+  when: mackerel_auto_retirement == 1 and mackerel_notify_slack == True

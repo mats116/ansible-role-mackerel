@@ -15,8 +15,8 @@ SERVICE="{{ mackerel_service }}"
 ROLE="{{ mackerel_role }}"
 
 # Slack
-SLACK_URL="{{ slack_url }}"
-SLACK_CHANNEL="{{ slack_channel }}"
+SLACK_URL="{{ mackerel_slack_url }}"
+SLACK_CHANNEL="{{ mackerel_slack_channel }}"
 
 LOCKFILE='/var/lock/subsys/notify_slack'
 

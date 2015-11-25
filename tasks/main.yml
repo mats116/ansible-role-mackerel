@@ -1,6 +1,10 @@
+- name: modify apt-key
+  apt_key: 
+    url: "https://mackerel.io/assets/files/GPG-KEY-mackerel"
+
 - name: modify repository
   apt_repository:
-    repo: 'deb http://apt.mackerel.io/debian/ mackerel contrib'
+    repo: "deb http://apt.mackerel.io/debian/ mackerel contrib"
     state: present
 
 - name: install

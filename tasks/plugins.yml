@@ -1,0 +1,17 @@
+- name: modify plugins config directory
+  file:
+    path: "/etc/mackerel-agent/conf.d/"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: modify plugins config
+  template:
+    src: "plugins/{{ item }}"
+    dest: "/etc/mackerel-agent/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: mackerel_plugin_conf
+  notify: restart mackerel-agent

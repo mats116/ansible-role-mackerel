@@ -1,1 +1,12 @@
-dependencies:
+galaxy_info:
+  author: mats116
+  description: "mackerel-agent installer"
+  license: MIT
+  min_ansible_version: 1.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  galaxy_tags:
+    - mackerel
+dependencies: []

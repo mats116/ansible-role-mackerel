@@ -36,29 +36,10 @@
     mode: 0644
   notify: restart mackerel-agent
 
-- name: modify plugins config directory
-  file:
-    path: "/etc/mackerel-agent/conf.d/"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
-- name: modify plugins config
-  template:
-    src: "plugins/{{ item }}"
-    dest: "/etc/mackerel-agent/conf.d/{{ item }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_items: mackerel_plugin_conf
-  notify: restart mackerel-agent
+- include: plugins.yml
 
 - name: mackerel-agent is enabled
   service:
     name: mackerel-agent
     state: started
     enabled: yes
-
-- include: notify_slack.yml
-  when: mackerel_auto_retirement == 1 and mackerel_notify_slack == True

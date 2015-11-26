@@ -1,7 +1,6 @@
 mackerel_service: default
 mackerel_role: default
 
-mackerel_plugin_conf: []
 mackerel_auto_retirement: 0
 
-mackerel_notify_slack: False
+mackerel_plugin_conf: []
